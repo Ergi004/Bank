@@ -1,0 +1,32 @@
+CREATE DATABASE IF NOT EXISTS Bank;
+CREATE USER IF NOT EXISTS "Ergi"@"localhost" IDENTIFIED BY "1234";
+GRANT ALL PRIVILEGES ON  Bank.*  TO "Ergi"@"localhost";
+FLUSH PRIVILEGES;
+
+USE Bank;
+
+
+CREATE TABLE IF NOT EXISTS accounts (
+    account_id INT PRIMARY KEY AUTO_INCREMENT,
+    card_number VARCHAR(16) UNIQUE NOT NULL DEFAULT generate_random_card_number(),
+    pin INT NOT NULL,
+    balance DECIMAL(10, 2) DEFAULT 0.00
+);
+
+CREATE TABLE IF NOT EXISTS transactions (
+    transaction_id INT PRIMARY KEY AUTO_INCREMENT,
+    account_id INT,
+    transaction_type ENUM('withdraw', 'deposit', 'transfer') NOT NULL,
+    amount DECIMAL(10, 2) NOT NULL,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (account_id) REFERENCES accounts(account_id)
+);
+
+DELIMITER //
+CREATE FUNCTION generate_random_card_number() RETURNS VARCHAR(16)
+BEGIN
+    DECLARE card_type VARCHAR(1);
+    SET card_type = CASE WHEN RAND() > 0.5 THEN '4' ELSE '5' END;
+    RETURN CONCAT(card_type, LPAD(FLOOR(RAND() * 100000000000000), 15, '0'));
+END //
+DELIMITER ;
