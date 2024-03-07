@@ -15,6 +15,7 @@ const BalanceHistoryChart = () => {
             const today = new Date().toLocaleDateString();
             const filteredData = data.balanceHistory.filter(item => new Date(item.timestamp).toLocaleDateString() === today);
             setBalanceHistory(filteredData);
+            console.log('okk', filteredData);
         } catch (error) {
             setError(error);
         } finally {

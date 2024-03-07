@@ -1,16 +1,31 @@
 import Axios from "./axios";
 
 const ApiTransactions = {
-  withdraw: async (amount) => {
+  withdraw: async (account_id, amount, token) => {
     try {
-        const response = await Axios.post('transactions/withdraw', { amount });
-        return response.data;
+      // Include the token in the request headers
+      const response = await Axios.post(
+        'transactions/withdraw',
+        { account_id, amount },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      return response.data;
     } catch (error) {
-        if (error.response && error.response.data && error.response.data.message) {
-            throw new Error(error.response.data.message);
-        } else {
-            throw new Error('Server Error');
-        }
+      if (error.response && error.response.data && error.response.data.message) {
+        throw new Error(error.response.data.message);
+      } else {
+        throw new Error('Server Error');
+      }
+    }
+  },
+  transfer: async (transferData) => {
+    try {
+      const response = await Axios.post('transactions/transfer', transferData);
+      console.log('Response from API:', response.data);
+      return response.data;
+    } catch (error) {
+      throw error.response ? error.response.data.message : 'Server Error';
     }
   },
   deposit: async (account_id, amount) => {
@@ -35,16 +50,6 @@ const ApiTransactions = {
   getBalanceByAccountId: async () => {
     try {
       const response = await Axios.get(`transactions/balance`);
-      console.log('Response from API:', response.data);
-      return response.data;
-    } catch (error) {
-      throw error.response ? error.response.data.message : 'Server Error';
-    }
-  },
-
-  transfer: async (transferData) => {
-    try {
-      const response = await Axios.post('transactions/transfer', transferData);
       console.log('Response from API:', response.data);
       return response.data;
     } catch (error) {

@@ -6,9 +6,11 @@ import Logout from "../components/LogoutButton";
 import TransferForm from "../components/TransferForm";
 import Chart from "../components/Chart";
 import Withdrawal from "../components/Withdrawal";
+import DepositForm from "../components/Deposit";
 const lightGreenColor = "#E1ECC8";
 const GreenColor = "#0766AD";
 const RedColor = "#ff4d4d";
+
 const Account = () => {
   return (
     <div style={{ backgroundColor: lightGreenColor }}>
@@ -36,7 +38,7 @@ const Account = () => {
             fontSize: "25px",
           }}
         >
-          Dashboard
+          Welcome To Your Bank Account
         </Typography>
         <Logout />
         {/* Additional content if needed */}
@@ -64,6 +66,9 @@ const Account = () => {
           <Grid container spacing={1}>
             <Grid item xs={12}>
               <Withdrawal />
+            </Grid>
+            <Grid item xs={12}>
+              <DepositForm />
             </Grid>
           </Grid>
         </Grid>
